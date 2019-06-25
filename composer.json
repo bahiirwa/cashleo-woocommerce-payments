@@ -1,17 +1,21 @@
 {
-    "name": "bahiirwa/woowoocashleo",
-    "description": "Plugin Add-on for WooCommerce",
-    "type": "project",
-    "license": "GPL",
-    "authors": [
-        {
-            "name": "Laurence Bahiirwa",
-            "email": "laurence@mediauganda.com"
-        }
-    ],
-    "minimum-stability": "dev",
-    "autoload": {
-        "psr-4": {"Inc\\": "./inc"},
-        "files": [ "./inc/Helpers.php" ]
+  "name": "bahiirwa/woocashleo",
+  "description": "Cashleo Collections plugin Add-on for WooCommerce",
+  "type": "project",
+  "license": "GPL",
+  "authors": [
+    {
+      "name": "Laurence Bahiirwa",
+      "email": "laurence@mediauganda.com"
     }
+  ],
+  "minimum-stability": "dev",
+  "autoload": {
+    "psr-4": {
+      "Inc\\": "./inc"
+    },
+    "files": [
+      "./inc/Helpers.php"
+    ]
+  }
 }
