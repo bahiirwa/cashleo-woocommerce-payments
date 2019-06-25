@@ -11,10 +11,11 @@ Class Settings extends BaseController
 {
 	
 	public function register() {
-		var_dump($this->plugin);
+
 		add_filter( 'plugin_action_links_' . $this->plugin, array( $this, 'woocashleo_plugin_action_links' ), 10, 2 );
 		add_action( 'admin_menu', array( $this, 'register_woocashleo_submenu_page' ), 99 );
 		add_filter( 'plugin_row_meta', array( $this, 'woocashleo_extra_links' ), 10, 2 );
+		
 	}
 
 	/**
