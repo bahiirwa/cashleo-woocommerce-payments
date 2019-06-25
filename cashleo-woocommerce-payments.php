@@ -3,13 +3,13 @@
 	Plugin Name: Cashleo WooCommerce Payments
 	Plugin URI: https://cashleo.com
 	Description: Cashleo Woocommerce Payments allows you to accept payment on your Woocommerce store via Mobile Money (Airtel, MTN).
-	Version: 1.0.1
+	Version: 1.1.0
 	Author: Cashleo Limited
 	Author URI: https://cashleo.com/
 	License: GPL-3.0+
 	License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 	WC requires at least: 3.0
-	WC tested up to: 3.5.4
+	WC tested up to: 3.6.4
 */
 
 // If this file is called firectly, abort!!!
