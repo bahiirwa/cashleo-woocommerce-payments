@@ -3,9 +3,9 @@ Contributors: cashleo, laurencebahiirwa
 Donate link: http://cashleo.com/
 Tags: cashleo, woocommerce, payments, gateway, mobile money
 Requires at least: 4.9.0
-Tested up to: 5.1.1
+Tested up to: 5.2.2
 Requires PHP: 5.6
-Stable tag: 1.0.1
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
  
@@ -39,11 +39,14 @@ Please visit our website [Cashleo Website](https://cashleo.com/ "Cashleo Mobile 
  
 == Changelog ==
  
+= 1.1.0 =
+- Added Conditionals to increase performance via minimal styles loading on each page.
+
 = 1.0.1 =
-OOP Variables to remove error on titling.
+- OOP Variables to remove error on titling.
  
 = 1.0.0 =
-Initial Plugin Commit
+- Initial Plugin Commit
 
 == Upcoming Improvements ==
 
