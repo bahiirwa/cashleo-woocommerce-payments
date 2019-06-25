@@ -13,7 +13,7 @@ class Woo_Cashleo extends WC_Payment_Gateway {
         $this->order_button_text 	= 'Make Payment';
         $this->payment_url 			= 'https://app.ugmart.ug/api/request-payment';
         $this->notify_url        	= WC()->api_request_url( 'woo_cashleo_gateway' );
-        $this->method_title     	= 'woocashleo WooCommerce Payments';
+        $this->method_title     	= 'Cashleo WooCommerce Payments';
         $this->method_description  	= 'Mobile Money (Airtel, MTN), Visa Card and MasterCard accepted';
 
         // Load the form fields.
@@ -30,7 +30,7 @@ class Woo_Cashleo extends WC_Payment_Gateway {
         $this->collection_account 		= $this->get_option( 'collection_account' );
         $this->ugmart_account_name 	    = $this->get_option( 'ugmart_account_name' );
 
-        $this->paying_phone_network 	    = $this->get_option( 'paying_phone_network' );
+        $this->paying_phone_network 	= $this->get_option( 'paying_phone_network' );
         $this->paying_phone_number 	    = $this->get_option( 'paying_phone_number' );
 
         // Check if the gateway can be used
@@ -84,8 +84,8 @@ class Woo_Cashleo extends WC_Payment_Gateway {
             'enabled' => array(
                 'title' 		=> 'Enable/Disable',
                 'type' 			=> 'checkbox',
-                'label' 		=> 'Enable woocashleo Payment Gateway',
-                'description' 	=> 'Enable or disable the gateway.',
+                'label' 		=> 'Enable Cashleo WooCommerce Payments',
+                'description' 	=> 'Enable or Disble Cashleo WooCommerce Payments.',
                 'desc_tip'      => true,
                 'default' 		=> 'yes'
             ),
