@@ -1,8 +1,8 @@
 <?php
+
 /*
 * Gateway class Register
 */
-
 class Woo_Cashleo extends WC_Payment_Gateway {
     
     public function __construct(){
@@ -49,14 +49,12 @@ class Woo_Cashleo extends WC_Payment_Gateway {
     public function is_valid_for_use() {
 
         if( ! in_array( get_woocommerce_currency(), array( 'UGX', 'USD' ) ) ) {
-
             $this->msg = 'woocashleo doesn\'t support your store currency, set it to Ugandan Shillings UGX or United State Dollars &#36 <a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=wc-settings&tab=general">here</a>';
-
             return false;
-
         }
 
         return true;
+
     }
 
 
@@ -66,7 +64,6 @@ class Woo_Cashleo extends WC_Payment_Gateway {
     public function is_available() {
 
         if ( $this->enabled == "yes" ) {
-
             if ( ! $this->collection_account && ! $this->ugmart_account_name && ! $this->collection_account ) {
                 return false;
             }
@@ -162,7 +159,11 @@ class Woo_Cashleo extends WC_Payment_Gateway {
     
             $account_email = get_option( 'woocommerce_woocashleo_gateway_settings' )['account_email'];
             $account_password = get_option( 'woocommerce_woocashleo_gateway_settings' )['account_password'];
-    
+
+            if ( false == $account_email && $account_password ) {
+                return;
+            }
+            
             // It wasn't there, so regenerate the data and save the transient
             $passcode = json_encode( array( 'email' => $account_email, 'password' => $account_password ) );
     
@@ -188,6 +189,7 @@ class Woo_Cashleo extends WC_Payment_Gateway {
                 // Set a transient with token code.
                 set_transient( 'woocashleo_token', $woocashleo_token, 1 * HOUR_IN_SECONDS );
             }
+        
         }
     }
 
@@ -300,7 +302,6 @@ class Woo_Cashleo extends WC_Payment_Gateway {
                 wc_add_notice( $response_error['message'] . 'Please Try again' , 'error' );
 
             }
-
 
             $response = array(
                 'result'	=> 'fail',

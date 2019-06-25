@@ -28,33 +28,35 @@ class Table  {
             $account_email = get_option( 'woocommerce_woocashleo_gateway_settings' )['account_email'];
             $account_password = get_option( 'woocommerce_woocashleo_gateway_settings' )['account_password'];
             
-            if ( $account_email || $account_password == true ) {
-                
-                // It wasn't there, so regenerate the data and save the transient
-                $passcode = json_encode( array( 'email' => $account_email, 'password' => $account_password ) );
-
-                $response = wp_remote_post( 'https://app.ugmart.ug/api/login', 
-                    array ( 
-                        'method' => 'POST', 
-                        'headers' => array( 'Content-Type' => 'application/json', 'timeout' => 500,  ), 
-                        'body' => $passcode  
-                    ) 
-                );
-        
-                if ( is_wp_error( $response ) ) {
-        
-                    $error_message = $response->get_error_message();
-                    echo "Something went wrong: $error_message";
-                    return;
-                    
-                } 
-    
-                $rep = json_decode( $response['body'], true );
-                $woocashleo_token = $rep['token'];
-                
-                // Set a transient with token code.
-                set_transient( 'woocashleo_token', $woocashleo_token, 1 * HOUR_IN_SECONDS );
+            if ( false == $account_email && $account_password ) {
+                return;
             }
+                
+            // It wasn't there, so regenerate the data and save the transient
+            $passcode = json_encode( array( 'email' => $account_email, 'password' => $account_password ) );
+
+            $response = wp_remote_post( 'https://app.ugmart.ug/api/login', 
+                array ( 
+                    'method' => 'POST', 
+                    'headers' => array( 'Content-Type' => 'application/json', 'timeout' => 500,  ), 
+                    'body' => $passcode  
+                ) 
+            );
+    
+            if ( is_wp_error( $response ) ) {
+    
+                $error_message = $response->get_error_message();
+                echo "Something went wrong: $error_message";
+                return;
+                
+            } 
+
+            $rep = json_decode( $response['body'], true );
+            $woocashleo_token = $rep['token'];
+            
+            // Set a transient with token code.
+            set_transient( 'woocashleo_token', $woocashleo_token, 1 * HOUR_IN_SECONDS );
+            
         }
     }
     
@@ -82,11 +84,10 @@ class Table  {
                 echo "Something went wrong: $error_message";
                 return;
     
-            } else {
-    
-                $transactions_results = $new_response['body']; // use the content
-                set_transient( 'transactions_results', $transactions_results, 5 * MINUTE_IN_SECONDS );
             }
+    
+            $transactions_results = $new_response['body']; // use the content
+            set_transient( 'transactions_results', $transactions_results, 5 * MINUTE_IN_SECONDS );
     
         }
     

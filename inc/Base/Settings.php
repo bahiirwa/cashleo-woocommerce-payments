@@ -34,8 +34,8 @@ Class Settings extends BaseController
 	 */
 	public function register_woocashleo_submenu_page() {
 
-		add_submenu_page( 'woocommerce', 'Cashleo Settings', 'Cashleo Settings', 'manage_options', $this->extra_url  ); 
-
+		add_submenu_page( 'woocommerce', 'Cashleo Settings', 'Cashleo Settings', 'manage_options', $this->extra_url  );
+		
 	}
 
 	/**
