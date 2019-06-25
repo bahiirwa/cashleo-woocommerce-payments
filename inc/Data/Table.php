@@ -81,6 +81,7 @@ class Table  {
     
                 $error_message = $new_response->get_error_message();
                 echo "Something went wrong: $error_message";
+                return;
     
             } else {
     
