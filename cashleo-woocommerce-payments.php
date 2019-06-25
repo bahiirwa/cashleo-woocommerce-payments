@@ -28,10 +28,9 @@ function woocommerce_not_installed_notice() {
 }
 
 if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-	if (function_exists( 'classicpress_version' )) {
-		return;
+	if (! function_exists( 'classicpress_version' )) {
+		add_action( 'admin_notices', 'woocommerce_not_installed_notice' );
 	}
-	add_action( 'admin_notices', 'woocommerce_not_installed_notice' );
 }
 
 // Require once the Composer Autoload
