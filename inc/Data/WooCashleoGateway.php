@@ -132,21 +132,16 @@ class Woo_Cashleo extends WC_Payment_Gateway {
      * Process the payment and return the result
     **/
     public function process_payment( $order_id ) {
-
         $this->get_payment_cleared( $order_id );
-        
     }
 
-     
     public function cashleo_redirect_custom( $order_id ){
-
         $order = new WC_Order( $order_id );
         $url = bloginfo('url') + '/shop/';
         if ( $order->status != 'failed' ) {
             wp_redirect($url);
             exit;
         }
-        
     }
 
     /*
@@ -268,13 +263,10 @@ class Woo_Cashleo extends WC_Payment_Gateway {
 
             // Mark as on-hold (we're awaiting the cheque)
             $order->update_status('on-hold', __( 'Awaiting payment', 'woocommerce' ));
-
-            // Reduce stock levels
+            // Reduce stock levels if stockable
             $order->reduce_order_stock();
-
             // Remove cart
             $woocommerce->cart->empty_cart();
-
             // Return thankyou redirect
             return array(
                 'result' => 'success',
@@ -286,21 +278,15 @@ class Woo_Cashleo extends WC_Payment_Gateway {
             $reponse_error = json_decode( $request['body'], true );
 
             if ( $response_error['message'] == 'Request Failed. Insufficient Balance' ) {
-
                 wc_add_notice( 'Sorry the payment is not complete. Please top up your mobile account and try again.', 'error' );
-                
             }
 
             if ( $response_error['message'] == 'Transaction ID already exists. Provide a unique ID for every request. Try again' ) {
-
                 wc_add_notice( 'Sorry the request was not completed. Please clear your cart and begin process again.', 'error' );
-                
             }
 
             else {
-
                 wc_add_notice( $response_error['message'] . 'Please Try again' , 'error' );
-
             }
 
             $response = array(
