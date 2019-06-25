@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) or die( 'Unauthorized Access!' );
 function woocommerce_not_installed_notice() {
 	?>
 	<div class="notice notice-error is-dismissible">
-		<p><?php _e( 'This Plugin requires WooCommerce 3+ to work. Please install it from repository', 'woowoocashleo' ); ?></p>
+		<p><?php _e( 'Cashleo WooCommerce Payments requires WooCommerce 3+ to work. Please install it from repository', 'woowoocashleo' ); ?></p>
 	</div>
 	<?php
 }
