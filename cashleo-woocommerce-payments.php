@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) or die( 'Unauthorized Access!' );
 function woocommerce_not_installed_notice() {
 	?>
 	<div class="notice notice-error is-dismissible">
-		<p><?php _e( 'Cashleo WooCommerce Payments plugin requires WooCommerce 3+ to work. Please install it from repository', 'woowoocashleo' ); ?></p>
+		<p><?php _e( 'Cashleo WooCommerce Payments plugin requires WooCommerce 3+ to work. Please install it from repository', 'woocashleo' ); ?></p>
 	</div>
 	<?php
 }
@@ -54,19 +54,22 @@ function woocashleo_wc_init() {
         require_once dirname( __FILE__ ) . '/inc/Data/WooCashleoGateway.php';
 	}
 
-	add_action( 'wp_enqueue_scripts', 'woocashleo_enqueue' );
-
-	function woocashleo_enqueue() {
-		wp_enqueue_style( 'woocashleo-gateway', plugins_url( 'elements/css/checkout.css' , __FILE__ ) );
-	}
-
 	/**
 	 * Initialize all the core classes
 	 */
 	if ( class_exists( 'Inc\\Init' ) ) {
 		Inc\Init::register_services();
 	}
+
+	// Add style for checkout page
+	function woocashleo_enqueue() {
+		//if checkout page
+		if ( is_checkout() ) {
+			wp_enqueue_style( 'woocashleo-gateway', plugins_url( 'elements/css/checkout.css' , __FILE__ ) );
+		}
+	}
 	
+	add_action( 'wp_enqueue_scripts', 'woocashleo_enqueue' );
 }
 
 add_action('plugins_loaded', 'woocashleo_wc_init', 0);
