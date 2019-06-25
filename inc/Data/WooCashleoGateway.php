@@ -94,7 +94,7 @@ class Woo_Cashleo extends WC_Payment_Gateway {
                 'type' 			=> 'text',
                 'description' 	=> 'This controls the title which the user sees during checkout.',
                 'desc_tip'      => false,
-                'default' 		=> 'Payment Gateway'
+                'default' 		=> 'Cashleo WooCommerce Payments'
             ),
             'description' => array(
                 'title' 		=> 'Description',
