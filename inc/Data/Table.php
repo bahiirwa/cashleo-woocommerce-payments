@@ -67,9 +67,8 @@ class Table  {
     
             // Set the auth code from stored transient.
             $woocashleo_token = get_transient( 'woocashleo_token' );
-    
             $auth = 'Bearer ' . $woocashleo_token;
-    
+            
             $new_response = wp_remote_post( 'https://app.ugmart.ug/api/transactions?limit=100', 
                 array(
                     'method'   => 'GET',
@@ -86,7 +85,6 @@ class Table  {
             } else {
     
                 $transactions_results = $new_response['body']; // use the content
-    
                 set_transient( 'transactions_results', $transactions_results, 5 * MINUTE_IN_SECONDS );
             }
     

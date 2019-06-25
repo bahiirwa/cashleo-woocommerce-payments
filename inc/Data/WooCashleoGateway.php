@@ -144,13 +144,12 @@ class Woo_Cashleo extends WC_Payment_Gateway {
     public function cashleo_redirect_custom( $order_id ){
 
         $order = new WC_Order( $order_id );
-    
         $url = bloginfo('url') + '/shop/';
-    
         if ( $order->status != 'failed' ) {
             wp_redirect($url);
             exit;
         }
+        
     }
 
     /*

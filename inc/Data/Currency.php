@@ -30,11 +30,9 @@ Class Currency
         return $currencies;
     }
     
-
     /**
     * Enable the Ugandan Shillings currency symbol in WC
     **/
-    
     public function cashleo_add_my_currency_symbol( $currency_symbol, $currency ) {
             switch( $currency ) {
                 case 'UGX': $currency_symbol = 'UGX '; break;
