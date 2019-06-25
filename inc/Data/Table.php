@@ -19,29 +19,35 @@ class Table  {
     public function getToken() {
     
         // Get any existing copy of our transient data - Auth token
-        if ( false === ( $woocashleo_token = get_transient( 'woocashleo_token' ) ) ) {
+        if ( true === get_transient( 'woocashleo_token' ) ) {
+            return;
+        }
+
+        if ( false === get_transient( 'woocashleo_token' ) ) {
     
             $account_email = get_option( 'woocommerce_woocashleo_gateway_settings' )['account_email'];
             $account_password = get_option( 'woocommerce_woocashleo_gateway_settings' )['account_password'];
-    
-            // It wasn't there, so regenerate the data and save the transient
-            $passcode = json_encode( array( 'email' => $account_email, 'password' => $account_password ) );
-    
-    
-            $response = wp_remote_post( 'https://app.ugmart.ug/api/login', 
-                array ( 
-                    'method' => 'POST', 
-                    'headers' => array( 'Content-Type' => 'application/json', 'timeout' => 500,  ), 
-                    'body' => $passcode  
-                ) 
-            );
-    
-            if ( is_wp_error( $response ) ) {
-    
-                $error_message = $response->get_error_message();
-                echo "Something went wrong: $error_message";
+            
+            if ( $account_email || $account_password == true ) {
                 
-            } else {
+                // It wasn't there, so regenerate the data and save the transient
+                $passcode = json_encode( array( 'email' => $account_email, 'password' => $account_password ) );
+
+                $response = wp_remote_post( 'https://app.ugmart.ug/api/login', 
+                    array ( 
+                        'method' => 'POST', 
+                        'headers' => array( 'Content-Type' => 'application/json', 'timeout' => 500,  ), 
+                        'body' => $passcode  
+                    ) 
+                );
+        
+                if ( is_wp_error( $response ) ) {
+        
+                    $error_message = $response->get_error_message();
+                    echo "Something went wrong: $error_message";
+                    return;
+                    
+                } 
     
                 $rep = json_decode( $response['body'], true );
                 $woocashleo_token = $rep['token'];
