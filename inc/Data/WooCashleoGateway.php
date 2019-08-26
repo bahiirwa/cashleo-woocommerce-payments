@@ -1,8 +1,8 @@
 <?php
-
 /*
 * Gateway class Register
 */
+
 class Woo_Cashleo extends WC_Payment_Gateway {
     
     public function __construct(){
@@ -13,7 +13,7 @@ class Woo_Cashleo extends WC_Payment_Gateway {
         $this->order_button_text 	= 'Make Payment';
         $this->payment_url 			= 'https://app.ugmart.ug/api/request-payment';
         $this->notify_url        	= WC()->api_request_url( 'woo_cashleo_gateway' );
-        $this->method_title     	= 'Cashleo WooCommerce Payments';
+        $this->method_title     	= 'woocashleo WooCommerce Payments';
         $this->method_description  	= 'Mobile Money (Airtel, MTN), Visa Card and MasterCard accepted';
 
         // Load the form fields.
@@ -30,7 +30,7 @@ class Woo_Cashleo extends WC_Payment_Gateway {
         $this->collection_account 		= $this->get_option( 'collection_account' );
         $this->ugmart_account_name 	    = $this->get_option( 'ugmart_account_name' );
 
-        $this->paying_phone_network 	= $this->get_option( 'paying_phone_network' );
+        $this->paying_phone_network 	    = $this->get_option( 'paying_phone_network' );
         $this->paying_phone_number 	    = $this->get_option( 'paying_phone_number' );
 
         // Check if the gateway can be used
@@ -49,12 +49,14 @@ class Woo_Cashleo extends WC_Payment_Gateway {
     public function is_valid_for_use() {
 
         if( ! in_array( get_woocommerce_currency(), array( 'UGX', 'USD' ) ) ) {
+
             $this->msg = 'woocashleo doesn\'t support your store currency, set it to Ugandan Shillings UGX or United State Dollars &#36 <a href="' . get_bloginfo('wpurl') . '/wp-admin/admin.php?page=wc-settings&tab=general">here</a>';
+
             return false;
+
         }
 
         return true;
-
     }
 
 
@@ -64,6 +66,7 @@ class Woo_Cashleo extends WC_Payment_Gateway {
     public function is_available() {
 
         if ( $this->enabled == "yes" ) {
+
             if ( ! $this->collection_account && ! $this->ugmart_account_name && ! $this->collection_account ) {
                 return false;
             }
@@ -81,8 +84,8 @@ class Woo_Cashleo extends WC_Payment_Gateway {
             'enabled' => array(
                 'title' 		=> 'Enable/Disable',
                 'type' 			=> 'checkbox',
-                'label' 		=> 'Enable Cashleo WooCommerce Payments',
-                'description' 	=> 'Enable or Disble Cashleo WooCommerce Payments.',
+                'label' 		=> 'Enable woocashleo Payment Gateway',
+                'description' 	=> 'Enable or disable the gateway.',
                 'desc_tip'      => true,
                 'default' 		=> 'yes'
             ),
@@ -91,7 +94,7 @@ class Woo_Cashleo extends WC_Payment_Gateway {
                 'type' 			=> 'text',
                 'description' 	=> 'This controls the title which the user sees during checkout.',
                 'desc_tip'      => false,
-                'default' 		=> 'Cashleo WooCommerce Payments'
+                'default' 		=> 'Payment Gateway'
             ),
             'description' => array(
                 'title' 		=> 'Description',
@@ -132,12 +135,18 @@ class Woo_Cashleo extends WC_Payment_Gateway {
      * Process the payment and return the result
     **/
     public function process_payment( $order_id ) {
+
         $this->get_payment_cleared( $order_id );
+        
     }
 
+     
     public function cashleo_redirect_custom( $order_id ){
+
         $order = new WC_Order( $order_id );
+    
         $url = bloginfo('url') + '/shop/';
+    
         if ( $order->status != 'failed' ) {
             wp_redirect($url);
             exit;
@@ -154,11 +163,7 @@ class Woo_Cashleo extends WC_Payment_Gateway {
     
             $account_email = get_option( 'woocommerce_woocashleo_gateway_settings' )['account_email'];
             $account_password = get_option( 'woocommerce_woocashleo_gateway_settings' )['account_password'];
-
-            if ( false == $account_email && $account_password ) {
-                return;
-            }
-            
+    
             // It wasn't there, so regenerate the data and save the transient
             $passcode = json_encode( array( 'email' => $account_email, 'password' => $account_password ) );
     
@@ -184,7 +189,6 @@ class Woo_Cashleo extends WC_Payment_Gateway {
                 // Set a transient with token code.
                 set_transient( 'woocashleo_token', $woocashleo_token, 1 * HOUR_IN_SECONDS );
             }
-        
         }
     }
 
@@ -263,10 +267,13 @@ class Woo_Cashleo extends WC_Payment_Gateway {
 
             // Mark as on-hold (we're awaiting the cheque)
             $order->update_status('on-hold', __( 'Awaiting payment', 'woocommerce' ));
-            // Reduce stock levels if stockable
+
+            // Reduce stock levels
             $order->reduce_order_stock();
+
             // Remove cart
             $woocommerce->cart->empty_cart();
+
             // Return thankyou redirect
             return array(
                 'result' => 'success',
@@ -278,16 +285,23 @@ class Woo_Cashleo extends WC_Payment_Gateway {
             $reponse_error = json_decode( $request['body'], true );
 
             if ( $response_error['message'] == 'Request Failed. Insufficient Balance' ) {
+
                 wc_add_notice( 'Sorry the payment is not complete. Please top up your mobile account and try again.', 'error' );
+                
             }
 
             if ( $response_error['message'] == 'Transaction ID already exists. Provide a unique ID for every request. Try again' ) {
+
                 wc_add_notice( 'Sorry the request was not completed. Please clear your cart and begin process again.', 'error' );
+                
             }
 
             else {
+
                 wc_add_notice( $response_error['message'] . 'Please Try again' , 'error' );
+
             }
+
 
             $response = array(
                 'result'	=> 'fail',

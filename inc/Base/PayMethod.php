@@ -1,7 +1,7 @@
 <?php
 /**
- * Add Cashleo WooCommerce Payments Gateway to WC
- */
+	* Add Voguepay Gateway to WC
+	**/
 namespace Inc\Base;
 
 Class PayMethod

@@ -19,22 +19,15 @@ class Table  {
     public function getToken() {
     
         // Get any existing copy of our transient data - Auth token
-        if ( true === get_transient( 'woocashleo_token' ) ) {
-            return;
-        }
-
-        if ( false === get_transient( 'woocashleo_token' ) ) {
+        if ( false === ( $woocashleo_token = get_transient( 'woocashleo_token' ) ) ) {
     
             $account_email = get_option( 'woocommerce_woocashleo_gateway_settings' )['account_email'];
             $account_password = get_option( 'woocommerce_woocashleo_gateway_settings' )['account_password'];
-            
-            if ( false == $account_email && $account_password ) {
-                return;
-            }
-                
+    
             // It wasn't there, so regenerate the data and save the transient
             $passcode = json_encode( array( 'email' => $account_email, 'password' => $account_password ) );
-
+    
+    
             $response = wp_remote_post( 'https://app.ugmart.ug/api/login', 
                 array ( 
                     'method' => 'POST', 
@@ -47,16 +40,15 @@ class Table  {
     
                 $error_message = $response->get_error_message();
                 echo "Something went wrong: $error_message";
-                return;
                 
-            } 
-
-            $rep = json_decode( $response['body'], true );
-            $woocashleo_token = $rep['token'];
-            
-            // Set a transient with token code.
-            set_transient( 'woocashleo_token', $woocashleo_token, 1 * HOUR_IN_SECONDS );
-            
+            } else {
+    
+                $rep = json_decode( $response['body'], true );
+                $woocashleo_token = $rep['token'];
+                
+                // Set a transient with token code.
+                set_transient( 'woocashleo_token', $woocashleo_token, 1 * HOUR_IN_SECONDS );
+            }
         }
     }
     
@@ -69,8 +61,9 @@ class Table  {
     
             // Set the auth code from stored transient.
             $woocashleo_token = get_transient( 'woocashleo_token' );
+    
             $auth = 'Bearer ' . $woocashleo_token;
-            
+    
             $new_response = wp_remote_post( 'https://app.ugmart.ug/api/transactions?limit=100', 
                 array(
                     'method'   => 'GET',
@@ -82,12 +75,13 @@ class Table  {
     
                 $error_message = $new_response->get_error_message();
                 echo "Something went wrong: $error_message";
-                return;
     
+            } else {
+    
+                $transactions_results = $new_response['body']; // use the content
+    
+                set_transient( 'transactions_results', $transactions_results, 5 * MINUTE_IN_SECONDS );
             }
-    
-            $transactions_results = $new_response['body']; // use the content
-            set_transient( 'transactions_results', $transactions_results, 5 * MINUTE_IN_SECONDS );
     
         }
     
